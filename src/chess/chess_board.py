@@ -133,6 +133,9 @@ class ChessBoard:
         
         destination = self.__matrix_to_chess_mapper[y][x]
 
+        if destination == source:
+            return False
+
         move = chess.Move.from_uci(source + destination)
 
         print("Chess move: " + source + destination)
