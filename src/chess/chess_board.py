@@ -27,7 +27,7 @@ class ChessBoard:
 
     def __put_chess_pieces(self, pieces, color, y1, y2):
         self.__board[y1][0] = self.__create_chess_piece(pieces, ChessPiece, 'rook', color,'1', y1, 0)
-        self.__board[y1][1] = self.__create_chess_piece(p   ieces, ChessPiece, 'knight', color, '1', y1, 1)
+        self.__board[y1][1] = self.__create_chess_piece(pieces, ChessPiece, 'knight', color, '1', y1, 1)
         self.__board[y1][2] = self.__create_chess_piece(pieces, ChessPiece, 'bishop', color, '1', y1, 2)
         self.__board[y1][3] = self.__create_chess_piece(pieces, ChessPiece, 'queen', color, '1', y1, 3)
         self.__board[y1][4] = self.__create_chess_piece(pieces, ChessPiece, 'king', color, '1' ,y1, 4)
@@ -65,9 +65,9 @@ class ChessBoard:
     def move_chess_piece(self, chess_move: ChessMove):      
         chess_piece = chess_move.chess_piece()
         destination = chess_move.destination()
-        # debug amacli
-        #y = destination['y']
-        #x = destination['x']
+
+        y_target = destination['y']
+        x_target = destination['x']
 
         x = chess_piece.x()
         y = chess_piece.y()        
@@ -75,7 +75,17 @@ class ChessBoard:
         print('x: ' + str(x))
         print('y: ' + str(y))
 
-        print(self.__matrix_to_chess_mapper[y][x])
+        source = self.__matrix_to_chess_mapper[y][x]
+        destination = self.__matrix_to_chess_mapper[y_target][x_target]
+
+        move = chess.Move.from_uci(source + destination)
+        self.__board_engine.push(move)
+
+        self.__board[y][x] = 0
+        
+        ## TODO: Eger burada bir tas varsa o da silinmeli arrayler var ya oradan silinmeli
+        self.__board[y_target][x_target] = chess_piece 
+        chess_piece.set_position(y_target, x_target)
 
         ##TODO: source'un yani piece'in bulundugu yerin board karsiligini al mapper ile
         ##TODO: destination'ın board karsiligini al mapper ile 
