@@ -110,3 +110,20 @@ class ChessBoard:
         ## TODO: should be implemented
         ## TODO: Should control checkmate and draw
         return True
+    
+    def is_valid_move(self, chess_move: ChessMove):
+        chess_piece = chess_move.chess_piece()
+        y, x = chess_piece.y(), chess_piece.x()
+                
+        source = self.__matrix_to_chess_mapper[y][x]
+        
+        destination = chess_move.destination()
+        y, x = destination['y'], destination['x']        
+        
+        destination = self.__matrix_to_chess_mapper[y][x]
+
+        move = chess.Move.from_uci(source + destination)
+
+        print("Chess move: " + source + destination)
+
+        return move in self.__board_engine.legal_moves
