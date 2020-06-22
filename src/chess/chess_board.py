@@ -16,8 +16,8 @@ class ChessBoard:
         self.__matrix_to_chess_mapper = self.__matrix_location_to_chess_board_mapper()
 
     def __fill_board(self, white_pieces, black_pieces):
-        self.__put_black_chess_pieces(white_pieces)
-        self.__put_white_chess_pieces(black_pieces)
+        self.__put_black_chess_pieces(black_pieces)
+        self.__put_white_chess_pieces(white_pieces)
     
     def __put_white_chess_pieces(self, white_pieces):
         self.__put_chess_pieces(white_pieces, 'white', 7, 6)
