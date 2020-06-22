@@ -49,12 +49,9 @@ class Human(Player):
     def __select_destination(self, chess_board, game_screen):
         invalid_selection = True
 
-        while invalid_selection:
-            x, y = game_screen.click()
-            chess_piece = chess_board.chess_piece(y, x)
+        x, y = game_screen.click()
+        chess_piece = chess_board.chess_piece(y, x)
 
-            if (chess_piece == 0) or (not self.__has_chess_piece(chess_piece)):
-                invalid_selection = False
         
         print('Destination height: ' + str(y))
         print('Destination width: ' + str(x))
