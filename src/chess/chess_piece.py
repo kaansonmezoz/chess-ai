@@ -27,6 +27,10 @@ class ChessPiece(metaclass=ABCMeta):
     def y(self):
         return self.__y
 
+    def set_position(self, y, x):
+        self.__y = y
+        self.__x = x
+
     def can_move(self):
         ##TODO: should be implemented
         return
