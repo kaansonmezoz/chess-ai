@@ -63,6 +63,7 @@ class ChessBoard:
         return self.__board[y][x]
 
     def move_chess_piece(self, chess_move: ChessMove):      
+        # buraya gelindiginde yapilan bir move'un valid oldugunu dusunuyoruz
         chess_piece = chess_move.chess_piece()
         destination = chess_move.destination()
 
@@ -84,7 +85,19 @@ class ChessBoard:
         self.__board[y][x] = 0
         
         ## TODO: Eger burada bir tas varsa o da silinmeli arrayler var ya oradan silinmeli
-        self.__board[y_target][x_target] = chess_piece 
+        target_piece = self.__board[y_target][x_target]
+
+        if target_piece != 0:
+            print('Target chess piece: ' + target_piece.get_id())
+            print('In black pieces: ' + str(target_piece in self.__black_pieces))
+            print('In white pieces: ' + str(target_piece in self.__white_pieces))
+            if target_piece.color() == 'white':
+                self.__white_pieces.remove(target_piece)
+            else:
+                self.__black_pieces.remove(target_piece)            
+        
+        self.__board[y_target][x_target] = chess_piece
+
         chess_piece.set_position(y_target, x_target)
 
         ##TODO: source'un yani piece'in bulundugu yerin board karsiligini al mapper ile
@@ -113,7 +126,9 @@ class ChessBoard:
         # TODO: Oyunculara belki de bir state koymak gerekebilir iste suan sana sah yapildi mi gibisiden cunku hamlen de ona gore bir karar vermen gerekiyor
         # TODO: Ai da buna gore karar verecek belki de puanlamasi vs degisecek o yuzden o sekilde bir hamle yapmak gerekiyor.
         # TODO: tabii bir de sah yapildigi zaman oncesinde oyun bitti mi diye bir kontrol yapmak gerekiyor cunku oyun bittiyse hamle yapamamali gerci bunu while'daki kosul ile sagliyoruz sanirsam
-                
+
+        # TODO: sah durumu vs varsa board farklı bir sekilde renderlanmali sanki
+
         return
 
     def game_not_finished(self):
