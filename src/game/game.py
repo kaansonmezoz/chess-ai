@@ -22,16 +22,21 @@ class Game:
             self.__player_order.append(player_1)
 
     def start(self):        
-        game_not_finished = True
+        game_finished = False
         
-        while game_not_finished: 
+        while not game_finished: 
             ## buradaki logicler aslinda oyunculara yuklenmeli ai'da surec boyle islemeyecek mesela chess_board ve GameScreen verilmesi gerekecek gibi duruyor
             player = self.__player_order.pop(0)
             chess_move = player.next_chess_move(self.__chess_board, self.__game_screen)
             print('Chess piece: ' + chess_move.chess_piece().get_id())
             self.__move_chess_piece(chess_move)
-            game_not_finished = self.__chess_board.game_not_finished()
+            game_finished = self.__chess_board.game_finished()
             self.__player_order.append(player)
+
+        print('Game finished !')
+        
+        while True:
+            self.__game_screen.click()    
 
     def __validate_player_arg(self, obj, arg_name):
         if not isinstance(obj, Player):

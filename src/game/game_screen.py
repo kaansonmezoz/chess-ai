@@ -67,8 +67,6 @@ class GameScreen:
 
         while not is_clicked:        
             for event in self.__pygame.event.get():
-                print(event)
-
                 if event.type == self.__pygame.QUIT:
                     sys.exit(0)
                 

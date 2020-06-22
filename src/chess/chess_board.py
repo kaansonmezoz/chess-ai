@@ -71,32 +71,11 @@ class ChessBoard:
 
         self.__update_chess_board(chess_move)
 
-        ##TODO: source'un yani piece'in bulundugu yerin board karsiligini al mapper ile
-        ##TODO: destination'ın board karsiligini al mapper ile 
-
-        ##TODO: daha sonrasında ise 'chess_hamlesi in board.legal_moves' diyerek kontrol et
-        ##TODO: chess_hamlesi mapped_source + mapped_destination ile bulunuyor. eger burada valid degilse oynatma
-        ##TODO: ama sanki bunun kararını player taş seçiyor ya chess_board'dan orada karar vermek gibi.
-
-        ##TODO: ornek kod buradaki kod herhangi bir chess move
-        ##TODO: chess_move = chess.Move.from_uci('a2a3')
-        ##TODO: chess_move in board.legal_moves
-        ##TODO: eger true donerse: board.push(chess_move)
-        ##TODO: sonra tabii bunun aynısının matriste de yapılması gerekiyor.
-        
-        # TODO: Rest of the function should be implemented
-        # TODO: Tasin suanki yeri 0 yapilmali.
-        # TODO: Destinationda bir tas varsa o yenilmeli ve white_pieces ya da black_pieces'ten silinmeli
         # TODO: Şah varsa ona göre bir tavir almak lazim.
-        # TODO: Oyuncular da eger sah yapildiysa onu bozmalari gerekiyor once ona gore bir hareket yapmaları yani tasi oynatmalari lazim
-        # TODO: Sahi bozacak hamle yapilmasina izin verilmeli mesela oyuncuların yani baska bir hamle yapamamalilar
-        # TODO: Bazi taslari oynayamazsin oynadigin taktirde rakibin sana şah yapiyordur cunku, kilitlenir o taş bununla ilgili de bir logic eklenmeli
-        # TODO: Oyuncularda belki de böyle bir state olması lazim sana sah yapildi mi ona gore kontroller yapilmali
-        # TODO: Happy pathleri implemente etmeye devam edelim, ama bu uc caseleri de eklemeye devam edelim.
-        # TODO: Ama bu bahsettigim kararlari verecek olan game board olmalı sanki ? yani bir tastansa bu durumun kontrolleri bu methodda olmalı ya da bir method olmalı chess_piece te ona bakıp o sekilde davranmamiz gerekiyor
+        # TODO: Rok dediğimiz hareket nasil yapilacak ona bir bakmak lazim
+
         # TODO: Oyunculara belki de bir state koymak gerekebilir iste suan sana sah yapildi mi gibisiden cunku hamlen de ona gore bir karar vermen gerekiyor
         # TODO: Ai da buna gore karar verecek belki de puanlamasi vs degisecek o yuzden o sekilde bir hamle yapmak gerekiyor.
-        # TODO: tabii bir de sah yapildigi zaman oncesinde oyun bitti mi diye bir kontrol yapmak gerekiyor cunku oyun bittiyse hamle yapamamali gerci bunu while'daki kosul ile sagliyoruz sanirsam
 
         # TODO: sah durumu vs varsa board farklı bir sekilde renderlanmali sanki
         # TODO: piyon en sona geldiği zaman kural olarak baska bir tasa evrilebiliyordu onu da eklemek gerek
@@ -138,11 +117,10 @@ class ChessBoard:
                 self.__white_pieces.remove(target_piece)
             else:
                 self.__black_pieces.remove(target_piece)            
-
-    def game_not_finished(self):
-        ## TODO: should be implemented
-        ## TODO: Should control checkmate and draw
-        return True
+    
+    def game_finished(self):
+        # stalemate = pat anlamına geliyor 
+        return self.__board_engine.is_checkmate() or self.__board_engine.is_stalemate()
     
     def is_valid_move(self, chess_move: ChessMove):
         chess_piece = chess_move.chess_piece()
