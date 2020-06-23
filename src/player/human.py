@@ -12,6 +12,7 @@ class Human(Player):
         valid_move = False
 
         while not valid_move:
+            game_screen.update(chess_board.white_pieces(), chess_board.black_pieces())
             chess_piece = self.__select_chess_piece(chess_board, game_screen)
             y, x = self.__select_destination(chess_board, game_screen) 
             chess_move = ChessMove(chess_piece, y, x)
