@@ -25,7 +25,6 @@ class Game:
         game_finished = False
         
         while not game_finished: 
-            ## buradaki logicler aslinda oyunculara yuklenmeli ai'da surec boyle islemeyecek mesela chess_board ve GameScreen verilmesi gerekecek gibi duruyor
             player = self.__player_order.pop(0)
             chess_move = player.next_chess_move(self.__chess_board, self.__game_screen)
             print('Chess piece: ' + chess_move.chess_piece().get_id())

@@ -107,9 +107,6 @@ class Ai(Player):
                 child['value'] = value
                 chess_board.pop()
 
-            ## parent_node icin value hesaplamak lazim
-            ## burada bir islem yapacagiz
-            ## value hesaplamasi yapabilir burada
             return    
     
         for possible_move in list(chess_board.legal_moves):
@@ -119,13 +116,12 @@ class Ai(Player):
             parent_node['children'].append(child)
             self.__generate_chess_moves_tree(child, chess_board, depth + 1)
             chess_board.pop()
-            #chess_board.set_board_fen(parent_node['board_fen']) alternative
 
     def __create_node(self, chess_move, board_fen, player_color, depth):
         node = {}
         node['children'] = []
         node['board_fen'] = board_fen
-        node['value'] = 0 # bu en son hesaplanacak aslında ... bunun degeri degisebilir tam emin degilisim suanda 
+        node['value'] = 0 # bu en son hesaplanacak aslında 
         
         ## bu node'a gelmek icin yapilan chess_move, bu hamle yapılmıs ve sıra diger oyuncuya gecmis board_fen halini almis
         node['chess_move'] = chess_move 

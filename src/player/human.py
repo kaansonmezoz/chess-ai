@@ -22,13 +22,6 @@ class Human(Player):
         return chess_move
     
     def __select_chess_piece(self, chess_board, game_screen):        
-        # burada soyle bir durum da var. secilen tas sah durumunu engelleyebilecek tas olmali ya da
-        # destination belirlenirken onu o durumu kontrol etmemiz gerekiyor
-        # tasin engelleyip engelleyemeyecegini bilmek için şahı engelleyebilen butun hamleleri bilmek lazim ki o tas kullanilabilir mi bilelim.
-        # o yuzden sanki destination secildikten sonra sah durumu ortadan kalkıyor mu ona bir bakmak lazim
-
-        # buradaki logici tekrar kurgulamak lazim
-
         invalid_selection = True
         x,y = None, None
 

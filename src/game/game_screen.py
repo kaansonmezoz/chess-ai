@@ -10,19 +10,6 @@ import sys
 
 class GameScreen:
     def __init__(self):
-        # pygame.error: No video mode has been set hatası aldim.
-        # bunu cozmek icin basta sallamasyon bir display mode olusturdum.
-
-        # ekrana bastirilmis olan taslar da burada olsun (baslangic_x, baslangic_y) seklinde tutularak
-        # bu sayede biri ekranda basinca bir seye direkt olarak ilgili tasi bulabilelim.
-        # o ilgili tasi da board'a geceriz ve orada ilgili islemlerin yapilmasini saglariz tasin hareketi gibi
-        # ama bu durumda da bu hareket bitince o tasin image'nin bulundugu konumu silmek gerekecek
-        # bir de cok fazla data share edilmis olacak bu fikirden caydim.
-        # en temizi board'dan yerlerini alalim taslarin sonra da gidip image'larını aliriz
-        # dolayısıyla buradaki chess_piece_image arkada board üzerinde bir chess_piece'e denk gelsin
-        # ya da sürekli olarak burada image ekleyelim verilen koordinata diger secenek de bu
-
-
         self.__pygame = pygame
         self.__pygame.init()
         self.__screen = pygame.display.set_mode((600,600))
