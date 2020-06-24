@@ -38,7 +38,11 @@ class ChessBoard:
         for x in range(8):
             self.__board[y2][x] = self.__create_chess_piece(pieces, ChessPiece, 'pawn', color, str(x+1), y2, x)
 
-    def __create_chess_piece(self, pieces, creator, piece_type, color, number, y, x):
+    def __create_chess_piece(self, pieces, creator, piece_type, color, number, y, x):        
+        # self.__board_engine.board_fen() bu isimize yarayabilir bununla board'un durumunu alıp kaydediyor olacagiz.
+        # buradaki degerleri kaybetmemek icin en mantıklısi ai'in kendisinin de bir tane buna bir board'ının olması ve onu kullanarak gerekli
+        # seyleri yapmasi
+        
         piece = creator(piece_type, color, number, y, x)
         pieces.append(piece)
         return piece
@@ -141,3 +145,6 @@ class ChessBoard:
         print("Chess move: " + source + destination)
 
         return move in self.__board_engine.legal_moves
+    
+    def string_representation(self):        
+        return self.__board_engine.fen()
