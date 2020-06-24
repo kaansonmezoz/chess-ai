@@ -3,6 +3,7 @@ print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resol
 
 from .player import Player
 from src.chess.chess_move import ChessMove
+from src.chess.chess_piece_table import ChessPieceTable
 
 import chess
 
@@ -34,6 +35,8 @@ class Ai(Player):
 
         ## AI'ın kac hamle sonrasına bakarak karar verecegi
         self.__max_depth = 3
+
+        self.__chess_piece_table = ChessPieceTable()
     
 
     def next_chess_move(self, chess_board, game_screen) -> ChessMove:
@@ -87,18 +90,20 @@ class Ai(Player):
             ## parent'ın yapabilecegi hamle yok demek
             ## parent final node demek, o yüzden bu node icin gidip value hesaplanacak
             board_fen = parent_node['board_fen']
-            value = self.__evaluate_chess_board(board_fen, chess_board.is_check(), parent_node['player_color'])
+            piece_map = chess_board.piece_map()
+            value = self.__evaluate_chess_board(board_fen, chess_board.is_check(), parent_node['player_color'], piece_map)
             parent_node['value'] = value
 
 
         if depth == self.__max_depth: ## buna benzer bir islemi eger herhangi bir legal moves yoksa da yapmak lazim ...
             for possible_move in list(chess_board.legal_moves):
                 chess_board.push(possible_move)
-                board_fen = chess_board.board_fen()                
+                board_fen = chess_board.board_fen()
+                piece_map = chess_board.piece_map()                
                 child = self.__create_node(possible_move, board_fen, player_color, depth)
                 parent_node['children'].append(child)
                 # her bir child icin value hesapla
-                value = self.__evaluate_chess_board(board_fen, chess_board.is_check(), player_color)
+                value = self.__evaluate_chess_board(board_fen, chess_board.is_check(), player_color, piece_map)
                 child['value'] = value
                 chess_board.pop()
 
@@ -131,7 +136,7 @@ class Ai(Player):
 
         return node
 
-    def __evaluate_chess_board(self, board_fen, is_check, player_color):
+    def __evaluate_chess_board(self, board_fen, is_check, player_color, piece_map):
         value = 0
         
         if is_check: ## şah var mı diye bakilir
@@ -146,6 +151,13 @@ class Ai(Player):
             if char in self.__points:
                 value += self.__points[char]
         
+        for square, piece in piece_map.items():
+            square = chess.square_name(square)
+            x = ord(square[0]) - ord('a')
+            y = 8 - int(square[1])
+
+            value += self.__chess_piece_table.get_table_value(str(piece), y, x)
+
         return value
 
     
