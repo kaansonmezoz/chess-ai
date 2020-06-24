@@ -8,4 +8,4 @@ from src.player.human      import Human
 
 class App:
     def start(self):
-        Game(ChessBoard(), Human('black'), Ai('white')).start()
+        Game(ChessBoard(), Human(), Ai()).start() 

@@ -5,8 +5,8 @@ from .player import Player
 from src.chess.chess_move import ChessMove
 
 class Human(Player):
-    def __init__(self, color):
-        super().__init__(color)
+    def __init__(self):
+        super().__init__('white')
 
     def next_chess_move(self, chess_board, game_screen) -> ChessMove:
         valid_move = False
