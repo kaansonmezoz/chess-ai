@@ -33,23 +33,30 @@ class Ai(Player):
         self.__points['black_check'] = 10000
 
         ## AI'ın kac hamle sonrasına bakarak karar verecegi
-        self.__max_depth = 4
+        self.__max_depth = 3
     
 
     def next_chess_move(self, chess_board, game_screen) -> ChessMove:
         board = chess.Board(chess_board.string_representation())
         #self.__create_possible_moves_tree(board)
-        self.y(board)
+        root = self.y(board)
+        selected_node = self.__minimax(root, 0, -32150, 32150)
+        
+        print('Ai selected its move')
+        print('Ai Move: ' + str(selected_node['chess_move']))
+        print('Ai Move value: ' + str(selected_node['value']))
 
         # TODO: bir sonraki hamleye ne kadar surede karar verdi ve ortalama suresi ne bunlari console'a bastiralim
-        chess_piece = self.__select_chess_piece(chess_board, game_screen)
-        return ChessMove(chess_piece, None, None)
+        # chess_piece = self.__select_chess_piece(chess_board, game_screen)
+
+        return chess_board.convert_chess_move_from_uci(selected_node['chess_move'])
+
 
     def y(self, chess_board: chess.Board):
         print('Ai started thinking !')
         print('Finding all possible moves within next ' + str(self.__max_depth) + ' moves')
         root = self.__create_node(None, chess_board.board_fen(), 'white', 0)
-        self.__x(root, chess_board, 1)
+        self.__generate_chess_moves_tree(root, chess_board, 1)
 
         node = root
         i = 0
@@ -69,6 +76,8 @@ class Ai(Player):
         print('Board Fen:' + node['board_fen'])
         print('Value: ' + str(node['value']))
         print('--------------------------------------')
+
+        return root
 
 
     def __generate_chess_moves_tree(self, parent_node, chess_board: chess.Board, depth):
@@ -103,7 +112,7 @@ class Ai(Player):
             board_fen = chess_board.board_fen()            
             child = self.__create_node(possible_move, board_fen, player_color, depth)
             parent_node['children'].append(child)
-            self.__x(child, chess_board, depth + 1)
+            self.__generate_chess_moves_tree(child, chess_board, depth + 1)
             chess_board.pop()
             #chess_board.set_board_fen(parent_node['board_fen']) alternative
 
@@ -138,3 +147,68 @@ class Ai(Player):
                 value += self.__points[char]
         
         return value
+
+    
+    def __minimax(self, current_node, depth, alpha, beta):
+        if depth == 0: ## maximizer
+            best_value = -32150
+            best_node = None
+
+            for child in current_node['children']:
+                selected_node = self.__minimax(child, depth + 1, alpha, beta)
+                child['value'] = selected_node['value']
+                
+                if child['value'] >= best_value:
+                    best_node = child
+                    best_value = child['value']
+            
+            return best_node
+
+        if depth == self.__max_depth or len(current_node['children']) == 0:
+            return current_node
+        
+        if self.__is_maximizer(current_node):
+            best_value = -32150 ## butun taslari bitince ai'in ve sah durumundaysa aslinda olasi olmayan en kotu durumdaki board icin value
+            best_node = None
+            
+            for child in current_node['children']:
+                selected_node = self.__minimax(child, depth + 1, alpha, beta)
+
+                best_node, best_value = self.__max_node(best_node, best_value, selected_node)
+                alpha = max(alpha, best_value)
+                
+                child['value'] = best_value
+
+                if alpha >= beta:
+                    break
+            
+            return selected_node
+        else:
+            best_value = 32150
+            best_node = None
+    
+            for child in current_node['children']:
+                selected_node = self.__minimax(child, depth + 1, alpha, beta)
+
+                best_node, best_value = self.__min_node(best_node, best_value, selected_node)
+                beta = min(beta, best_value)
+
+                if alpha >= beta:
+                    break
+
+            return selected_node
+
+    def __is_maximizer(self, node):
+        return node['player_color'] == self.color()
+    
+    def __max_node(self, best_node, best_value, node):
+        if best_value > node['value']:
+            return best_node, best_value
+        
+        return node, node['value']
+    
+    def __min_node(self, best_node, best_value, node):
+        if best_value < node['value']:
+            return best_node, best_value
+
+        return node, node['value']    

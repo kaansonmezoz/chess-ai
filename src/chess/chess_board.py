@@ -148,3 +148,19 @@ class ChessBoard:
     
     def string_representation(self):        
         return self.__board_engine.fen()
+    
+    def convert_chess_move_from_uci(self, uci):
+        uci = str(uci)
+        
+        source = uci[:2]
+        target = uci[2:]
+
+        source_x = ord(source[0]) - ord('a')
+        source_y = 8 - int(source[1])
+
+        target_x = ord(target[0]) - ord('a')
+        target_y = 8 - int(target[1])
+
+        chess_piece = self.__board[source_y][source_x]
+        
+        return ChessMove(chess_piece, target_y, target_x)
